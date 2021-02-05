@@ -1,0 +1,14 @@
+{
+  "name": "item-management",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index"
+  },
+  "author": "Kelompok 4",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
