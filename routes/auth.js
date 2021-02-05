@@ -3,7 +3,7 @@ import express from 'express'
 const auth = express.Router()
 
 auth.get('/', (req, res) => {
-    res.send("tes auth")
+    res.send("route auth")
 })
 
 export default auth
