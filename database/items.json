@@ -3,5 +3,10 @@
         "id": 1,
         "userId": 1,
         "name": "chicki"
+    },
+    {
+        "id": 2,
+        "userId": 1,
+        "name": "milkita"
     }
 ]
