@@ -4,5 +4,11 @@
         "name": "M. Firhan Azmi Nor",
         "username": "muhammadfirhan",
         "password": "12345"
+    },
+    {
+        "id": 2,
+        "name": "Mikael Dimas",
+        "username": "Mikael",
+        "password": "080808"
     }
 ]
