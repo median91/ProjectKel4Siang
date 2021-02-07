@@ -28,8 +28,11 @@ friend.get('/:id', (req, res) => {
     }
 })
 
+// add friend
 friend.post('/', (req, res) => {
     const { userId, name } = req.body
+
+    // check for empty input
     if (!userId || !name) {
         res.status(400).json({
             "success": false,
@@ -43,27 +46,67 @@ friend.post('/', (req, res) => {
             "data": friend
         })
     }
-    const user = userModel.checkById(userId)
-    if (!user) {
-        res.status(400).json({
+
+    // const user = userModel.checkById(userId)
+    // if (!user) {
+    //     res.status(400).json({
+    //         "success": false,
+    //         "message": "user id not found.",
+    //         "data": {}
+    //     })
+    // }
+
+    //check name not string
+    if (typeof name !== 'string') {
+        return res.status(400).json({
             "success": false,
-            "message": "user id not found.",
+            "message": "Cannot create friend. Name input is not an string.",
             "data": {}
         })
     }
+
+    //check success create friend
     let friend = friendModel.create(userId, name)
     res.status(200).json({
         "success": 200,
         "message": "Create success.",
         "data": friend
     })
+
+    // check for non-integer input
+    if (!Number.isInteger(userId) || !Number.isInteger(name)) {
+        return res.status(400).json({
+            "success": false,
+            "message": "Cannot create friend. Input is not an integer.",
+            "data": {}
+        })
+    }
+
+    // Check for negative value.
+    if (userId > 0 && name > 0) {
+        // Create transaction.
+        const friend = friendModel.create(userId, name)
+        return res.status(200).json({
+            "success": true,
+            "message": "friend has been submitted successfully.",
+            "data": friend
+        })
+    }
+    else {
+        return res.status(400).json({
+            "success": false,
+            "message": "Cannot create friend. Negative value input is not allowed.",
+            "data": {}
+        })
+    }
 })
 
+// edit friends
 friend.put('/', (req, res) => {
-    const { id, name } = req.body
+    const { id, userId, name } = req.body
 
-    // Check for empty input.
-    if (!name) {
+    // check for empty input
+    if (!userId || !name) {
         return res.status(400).json({
             "success": false,
             "message": "Cannot edit friend. Empty string and zero value input is not allowed.",
@@ -71,7 +114,25 @@ friend.put('/', (req, res) => {
         })
     }
 
-    // Edit the friend.
+    // check for non-integer input
+    if (!Number.isInteger(userId)) {
+        return res.status(400).json({
+            "success": false,
+            "message": "Cannot edit friend. Input is not an integer.",
+            "data": {}
+        })
+    }
+
+    // check for negatif value
+    if (userId < 0 || name < 0) {
+        return res.status(400).json({
+            "success": false,
+            "message": "Cannot edit friend. Negative value input is not allowed.",
+            "data": {}
+        })
+    }
+
+    // success edited friend
     const result = friendModel.findId(id)
     if (result) {
         const friend = friendModel.update(id, name)

@@ -12,9 +12,10 @@ const model = {
 
         return friend
     },
-    update: (id, name) => {
+    update: (id, userId, name) => {
         const index = friends.findIndex(friend => friend.id === id)
         friends[index].name = name
+        friends[index].userId = userId
         return friends[index]
     },
     findId: (id) => friends.find(friend => friend.id === id)
