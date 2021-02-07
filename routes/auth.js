@@ -35,6 +35,15 @@ auth.post('/register', (req, res) => {
             "message": "make sure you entered all required data.",
             "data": {}
         })
+    
+    }
+    
+    if(typeof name !== 'string' && typeof username !== 'string' && typeof password !== 'string') {
+        res.status(400).json({
+            "success": false,
+            "message": "all input should be formatted as string",
+            "data": {}
+        })
     }
 
     let sameUsername = userModel.findUsername(username)

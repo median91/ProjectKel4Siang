@@ -4,8 +4,8 @@ const model = {
     checkLogin: (username, password) => users.find(user => user.username === username && user.password === password),
     checkById: (id) => users.find(user => user.id === id),
     create: (name, username, password) => {
-        let id = users.length
-        let user = { id, name, username, password }
+        let id = users.length + 1
+        let user = {id, name, username, password}
 
         users.push(user)
 
