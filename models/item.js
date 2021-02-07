@@ -1,4 +1,6 @@
 const items = require('../database/items.json')
+const item = require('../routes/item')
+
 
 
 const model = {
@@ -17,9 +19,13 @@ const model = {
         items[index].name = name
         return items[index]
     },
-    findId: (id) => items.find(item => item.id === id)
-
+    deleteitem: (id) => {
+        const index = items.findIndex(item => item.id === id)
+        const deleteitem = items.splice(index, 1)
+        return deleteitem
+    },
+    findId: (id) => items.find(item => item.id === id),
+    fetchItem: item
 }
-
 
 module.exports = model

@@ -43,8 +43,6 @@ item.post('/', (req, res) => {
 
 item.put('/', (req, res) => {
     const { id, name } = req.body
-
-    // Check for empty input.
     if (!name) {
         return res.status(400).json({
             "success": false,
@@ -52,8 +50,6 @@ item.put('/', (req, res) => {
             "data": {}
         })
     }
-
-    // Edit the transaction.
     const result = itemModel.findId(id)
     if (result) {
         const item = itemModel.update(id, name)
@@ -71,25 +67,43 @@ item.put('/', (req, res) => {
     }
 })
 
-// DELETE
-/**transaction.delete('/', (req, res) => {
+item.delete('/', (req, res) => {
     const id = req.body.id
 
-    const result = transactionModel.findId(id)
+    const result = itemModel.findId(id)
     if (result) {
-        const deletedTransaction = transactionModel.deleteTransaction(id)
+        const deleteitem = itemModel.deleteitem(id)
         return res.status(200).json({
             "success": true,
-            "message": "Transaction has been deleted successfully.",
-            "data": deletedTransaction
+            "message": "item has been deleted successfully.",
+            "data": deleteitem
         })
     } else {
         return res.status(400).json({
             "success": false,
-            "message": "Cannot delete transaction. The transaction id is not found.",
+            "message": "Cannot delete item. The item id is not found.",
             "data": {}
         })
     }
-})**/
+})
+
+item.get('/:id', (req, res) => {
+    const id = Number(req.params.id)
+    const result = itemModel.findId(id)
+
+    if (result) {
+        return res.status(200).json({
+            "success": true,
+            "message": "Item has been found successfully.",
+            "data": result
+        })
+    } else {
+        return res.status(404).json({
+            "success": false,
+            "message": "The item cannot be found.",
+            "data": {}
+        })
+    }
+})
 
 module.exports = item
