@@ -14,9 +14,11 @@ const model = {
 
         return item
     },
-    update: (id, name) => {
+    update: (id, userId, name) => {
         const index = items.findIndex(item => item.id === id)
+        items[index].userId = userId
         items[index].name = name
+
         return items[index]
     },
     deleteitem: (id) => {
