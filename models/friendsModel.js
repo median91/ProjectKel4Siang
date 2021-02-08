@@ -18,8 +18,12 @@ const model = {
         friends[index].userId = userId
         return friends[index]
     },
-    findId: (id) => friends.find(friend => friend.id === id)
-
+    findId: (id) => friends.find(friend => friend.id === id),
+    delete: (id) => {
+        const index = friends.findIndex(friend => friend.id === id)
+        const deletedFriend = friends.splice(index, 1)
+        return deletedFriend
+    }
 }
 
 
