@@ -14,7 +14,7 @@ exports.getTransactionById = (req, res) => {
     const result = transactionModel.findId(id)
     
     if (result) {
-
+      
         return res.status(200).json({
             "success": true,
             "message": "Transaction has been found successfully.",
@@ -22,13 +22,13 @@ exports.getTransactionById = (req, res) => {
         })
 
     } else {
-
+      
         return res.status(404).json({
             "success": false,
             "message": "The transaction cannot be found.",
             "data": {}
         })
-
+      
     }
 }
 
