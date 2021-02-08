@@ -37,11 +37,31 @@ exports.createItem = (req, res) => {
             "message": "make sure you entered all required data.",
             "data": {}
         })
-        let item = itemModel.get(id)
-        res.status(200).json({
-            "success": 200,
-            "message": "Create success.",
-            "data": item
+    }
+
+    //check name not string
+    if (typeof name !== 'string') {
+        return res.status(400).json({
+            "success": false,
+            "message": "Cannot create item. Name input is not an string.",
+            "data": {}
+        })
+    }
+
+    // Check for non-integer input.
+    if (!Number.isInteger(userId)) {
+        return res.status(400).json({
+            "success": false,
+            "message": "Cannot create item. Input is not an integer.",
+            "data": {}
+        })
+    }
+    
+    if (userId < 0) {
+        return res.status(400).json({
+            "success": false,
+            "message": "Cannot create item. Negative value input is not allowed.",
+            "data": {}
         })
     }
 
@@ -54,49 +74,12 @@ exports.createItem = (req, res) => {
         })
     }
 
-    //check name not string
-    if (typeof name !== 'string') {
-        return res.status(400).json({
-            "success": false,
-            "message": "Cannot create item. Name input is not an string.",
-            "data": {}
-        })
-    }
-
-    //check success create item
-    let item = itemModel.create(userId, name)
-    res.status(200).json({
-        "success": 200,
-        "message": "Create success.",
+    const item = itemModel.create(userId, name)
+    return res.status(200).json({
+        "success": true,
+        "message": "Item has been submitted successfully.",
         "data": item
     })
-
-    // Check for non-integer input.
-    if (!Number.isInteger(userId) || !Number.isInteger(name)) {
-        return res.status(400).json({
-            "success": false,
-            "message": "Cannot create item. Input is not an integer.",
-            "data": {}
-        })
-    }
-
-    // Check for negative value.
-    if (userId > 0 && name > 0) {
-        // Create transaction.
-        const item = itemModel.create(userId, name)
-        return res.status(200).json({
-            "success": true,
-            "message": "Item has been submitted successfully.",
-            "data": item
-        })
-    }
-    else {
-        return res.status(400).json({
-            "success": false,
-            "message": "Cannot create item. Negative value input is not allowed.",
-            "data": {}
-        })
-    }
 }
 
 exports.updateItem = (req, res) => {
@@ -127,21 +110,29 @@ exports.updateItem = (req, res) => {
     }
 
     // Check for negative value.
-    if (userId > 0) {
-
-        const item = itemModel.update(id, userId, name)
-        return res.status(200).json({
-            "success": true,
-            "message": "Item has been edited successfully.",
-            "data": item
-        })
-    } else {
+    if (userId < 0) {
         return res.status(400).json({
             "success": false,
             "message": "Cannot edited item. Negative value input is not allowed.",
             "data": {}
         })
     }
+
+    const user = userModel.checkById(userId)
+    if (!user) {
+        res.status(400).json({
+            "success": false,
+            "message": "user id not found.",
+            "data": {}
+        })
+    }
+
+    const item = itemModel.update(id, userId, name)
+    return res.status(200).json({
+        "success": true,
+        "message": "Item has been edited successfully.",
+        "data": item
+    })
 }
 
 exports.deleteItem = (req, res) => {
