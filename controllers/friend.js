@@ -139,7 +139,7 @@ exports.updateFriend = (req, res) => {
     if (!userIdResult) {
         return res.status(400).json({
             "success": false,
-            "message": "Cannot edit transaction. User ID",
+            "message": "Cannot update friend, UserId not found",
             "data": {}
         })
     }
