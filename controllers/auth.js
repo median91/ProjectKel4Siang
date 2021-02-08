@@ -9,13 +9,13 @@ exports.login = (req, res) => {
     const user = userModel.checkLogin(username, password)
     
     if (user) {
-        res.json({
+        return res.json({
             "success": true,
             "message": "login success.",
             "data": user
         })
     } else {
-        res.status(400).json({
+        return res.status(400).json({
             "success": false,
             "message": "unauthorized.",
             "data": {}
@@ -27,7 +27,7 @@ exports.register = (req, res) => {
     const { name, username, password } = req.body
 
     if(!name || !username || !password) {
-        res.status(400).json({
+        return res.status(400).json({
             "success": false,
             "message": "make sure you entered all required data.",
             "data": {}
@@ -36,7 +36,7 @@ exports.register = (req, res) => {
     }
     
     if(typeof name !== 'string' && typeof username !== 'string' && typeof password !== 'string') {
-        res.status(400).json({
+        return res.status(400).json({
             "success": false,
             "message": "all input should be formatted as string",
             "data": {}
@@ -45,7 +45,7 @@ exports.register = (req, res) => {
 
     let sameUsername = userModel.findUsername(username)
     if (sameUsername) {
-        res.status(400).json({
+        return res.status(400).json({
             "success": false,
             "message": "username already registered.",
             "data": {}
@@ -54,7 +54,7 @@ exports.register = (req, res) => {
 
     const user = userModel.create(name, username, password)
 
-    res.status(200).json({
+    return res.status(200).json({
         "success": 200,
         "message": "registration success.",
         "data": user

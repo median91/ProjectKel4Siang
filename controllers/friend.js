@@ -33,7 +33,7 @@ exports.createFriend = (req, res) => {
 
     // check for empty input
     if (!userId || !name) {
-        res.status(400).json({
+        return res.status(400).json({
             "success": false,
             "message": "make sure you entered all required data.",
             "data": {}

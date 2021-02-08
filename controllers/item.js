@@ -32,7 +32,7 @@ exports.createItem = (req, res) => {
     const { userId, name } = req.body
 
     if (!name || !userId) {
-        res.status(400).json({
+        return res.status(400).json({
             "success": false,
             "message": "make sure you entered all required data.",
             "data": {}
@@ -67,7 +67,7 @@ exports.createItem = (req, res) => {
 
     const user = userModel.checkById(userId)
     if (!user) {
-        res.status(400).json({
+        return res.status(400).json({
             "success": false,
             "message": "user id not found.",
             "data": {}
@@ -120,7 +120,7 @@ exports.updateItem = (req, res) => {
 
     const user = userModel.checkById(userId)
     if (!user) {
-        res.status(400).json({
+        return res.status(400).json({
             "success": false,
             "message": "user id not found.",
             "data": {}
