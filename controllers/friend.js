@@ -28,7 +28,7 @@ exports.getFriendById = (req, res) => {
     }
 }
 
-exports.createFriend =  (req, res) => {
+exports.createFriend = (req, res) => {
     const { userId, name } = req.body
 
     // check for empty input
@@ -46,6 +46,8 @@ exports.createFriend =  (req, res) => {
         })
     }
 
+
+
     //check name not string
     if (typeof name !== 'string') {
         return res.status(400).json({
@@ -55,16 +57,8 @@ exports.createFriend =  (req, res) => {
         })
     }
 
-    //check success create friend
-    let friend = friendModel.create(userId, name)
-    res.status(200).json({
-        "success": 200,
-        "message": "Create success.",
-        "data": friend
-    })
-
     // check for non-integer input
-    if (!Number.isInteger(userId) || !Number.isInteger(name)) {
+    if (!Number.isInteger(userId)) {
         return res.status(400).json({
             "success": false,
             "message": "Cannot create friend. Input is not an integer.",
@@ -73,21 +67,30 @@ exports.createFriend =  (req, res) => {
     }
 
     // Check for negative value.
-    if (userId > 0 && name > 0) {
-        // Create transaction.
-        const friend = friendModel.create(userId, name)
-        return res.status(200).json({
-            "success": true,
-            "message": "friend has been submitted successfully.",
-            "data": friend
-        })
-    } else {
+    if (userId < 0 || name < 0) {
         return res.status(400).json({
             "success": false,
             "message": "Cannot create friend. Negative value input is not allowed.",
             "data": {}
         })
     }
+
+    // check for avaible userId
+    const userIdResult = userModel.checkById(userId)
+    if (!userIdResult) {
+        return res.status(400).json({
+            "success": false,
+            "message": "Cannot create friend. User ID",
+            "data": {}
+        })
+    }
+    // Create friend.
+    let friend = friendModel.create(userId, name)
+    return res.status(200).json({
+        "success": true,
+        "message": "friend has been submitted successfully.",
+        "data": friend
+    })
 }
 
 exports.updateFriend = (req, res) => {
@@ -102,6 +105,15 @@ exports.updateFriend = (req, res) => {
         })
     }
 
+    //check name not string
+    if (typeof name !== 'string') {
+        return res.status(400).json({
+            "success": false,
+            "message": "Cannot create item. Name input is not an string.",
+            "data": {}
+        })
+    }
+
     // check for non-integer input
     if (!Number.isInteger(userId)) {
         return res.status(400).json({
@@ -112,7 +124,7 @@ exports.updateFriend = (req, res) => {
     }
 
     // check for negatif value
-    if (userId < 0 || name < 0) {
+    if (userId < 0) {
         return res.status(400).json({
             "success": false,
             "message": "Cannot edit friend. Negative value input is not allowed.",
@@ -120,22 +132,34 @@ exports.updateFriend = (req, res) => {
         })
     }
 
-    // success edited friend
+    // check for friend id
     const result = friendModel.findId(id)
-    if (result) {
-        const friend = friendModel.update(id, name)
-        return res.status(200).json({
-            "success": true,
-            "message": "friend has been editted successfully.",
-            "data": friend
-        })
-    } else {
+    if (!result) {
         return res.status(400).json({
             "success": false,
             "message": "Cannot edit friend. The friend id is not found.",
             "data": {}
         })
     }
+
+    // check userid
+    const userIdResult = userModel.checkById(userId)
+    if (!userIdResult) {
+        return res.status(400).json({
+            "success": false,
+            "message": "Cannot edit transaction. User ID",
+            "data": {}
+        })
+    }
+
+    // edit friend
+    let resultEdit = friendModel.update(id, userId, name)
+    return res.status(200).json({
+        "success": true,
+        "message": "friend has been editted successfully.",
+        "data": resultEdit
+    })
+
 }
 
 exports.deleteFriend = (req, res) => {
