@@ -38,15 +38,7 @@ exports.createFriend = (req, res) => {
             "message": "make sure you entered all required data.",
             "data": {}
         })
-        let friend = friendModel.get(id)
-        res.status(200).json({
-            "success": 200,
-            "message": "Create success.",
-            "data": friend
-        })
     }
-
-
 
     //check name not string
     if (typeof name !== 'string') {
